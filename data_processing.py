@@ -28,5 +28,5 @@ class DataProcesser:
         for i in range(img_num):
             plt.subplot(1, img_num, i+1)
             plt.title(f"Label - {data_y[i]}")
-            plt.imshow(data_x[i].reshape(28,28), cmap="gray")
+            plt.imshow(data_x[i].reshape(28,28), cmap="Greys")
         plt.show()
