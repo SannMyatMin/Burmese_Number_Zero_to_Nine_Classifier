@@ -1,22 +1,26 @@
 import tensorflow as tf 
 from tensorflow import keras
 from tensorflow.keras import layers, models
+from tensorflow.keras.callbacks import EarlyStopping
 
 class BurmeseNumberPredictor:
-    def __init__(self, train_x, train_y, valix_x, valid_y, test_x, test_y, class_names):
+    def __init__(self, train_x, train_y, valid_x, valid_y, test_x, test_y, class_names, epochs=50, batch_size=64):
         self.train_x       = train_x
         self.train_y       = train_y
-        self.valid_x       = valix_x
+        self.valid_x       = valid_x
         self.valid_y       = valid_y
         self.test_x        = test_x
         self.test_y        = test_y
+        self.epochs        = epochs
+        self.batch_size    = batch_size
         self.class_names   = class_names
         self.total_classes = len(class_names)
+        self.early_stop    = EarlyStopping(monitor="val_loss", patience=5, restore_best_weights=True)
         self.model         = None
 
     def build_model(self):
         model = models.Sequential([
-            layers.Conv2D(32, (3,3), activation="relu", padding="same", input_reshape=(28, 28, 1)),
+            layers.Conv2D(32, (3,3), activation="relu", padding="same", input_shape=(28, 28, 1)),
             layers.BatchNormalization(),
             layers.Conv2D(32, (3,3), activation="relu", padding="same"),
             layers.BatchNormalization(),
@@ -39,4 +43,25 @@ class BurmeseNumberPredictor:
 
         self.model = model
         return self.model
+    
+    def _compile_model(self):
+        self.model.compile(
+            optimizer = "adam",
+            loss      = "categorical_crossentropy",
+            metrics   = ["accuracy"]
+        )
+        print("Model is compiled succesfully")
+
+    def train_model(self):
+        self._compile_model()
+        training_history = self.model.fit(
+            self.train_x,
+            self.train_y,
+            epochs = self.epochs,
+            batch_size = self.batch_size,
+            validation_data = (self.valid_x, self.valid_y),
+            callbacks = [self.early_stop]
+        )
+        return training_history
+
     
