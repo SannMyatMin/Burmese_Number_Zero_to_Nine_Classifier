@@ -20,7 +20,9 @@ class BurmeseNumberClassifier:
 
     def build_model(self):
         model = models.Sequential([
-            layers.Conv2D(32, (3,3), activation="relu", padding="same", input_shape=(28, 28, 1)),
+            keras.Input(shape=(28, 28, 1)),
+
+            layers.Conv2D(32, (3,3), activation="relu", padding="same"),
             layers.BatchNormalization(),
             layers.Conv2D(32, (3,3), activation="relu", padding="same"),
             layers.BatchNormalization(),
@@ -45,7 +47,7 @@ class BurmeseNumberClassifier:
 
         return self.model
     
-    def _compile_model(self):
+    def compile_model(self):
         self.model.compile(
             optimizer = "adam",
             loss      = "categorical_crossentropy",
@@ -54,7 +56,6 @@ class BurmeseNumberClassifier:
         print("Model is compiled succesfully")
 
     def train_model(self):
-        self._compile_model()
         training_history = self.model.fit(
             self.train_x,
             self.train_y,
@@ -69,5 +70,9 @@ class BurmeseNumberClassifier:
         loss, accuracy = self.model.evaluate(self.test_x, self. test_y)
         print(f"Model testing accuracy : {accuracy*100:.3f}%")
         return accuracy, loss
+    
+    def save_model(self, saved_dir):
+        self.model.save(saved_dir)
+        print("Model is saved")
     
     
