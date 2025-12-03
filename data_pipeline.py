@@ -4,12 +4,14 @@ import tensorflow as tf
 from pathlib import Path
 from tensorflow import keras
 import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc_params
 from sklearn.model_selection import train_test_split
 
 class DataPipeline:
     def __init__(self, dataset_dir="data.pkl"):
         self.dataset_dir = Path(dataset_dir)
         self.class_names = ["၀","၁","၂","၃","၄","၅","၆","၇","၈","၉"]
+        self.font        = font_manager.FontProperties(fname=Path(r"C:\Windows\Fonts\Pyidaungsu-2.5.3_Regular.ttf"))
         with open(self.dataset_dir, "rb") as file:
             self.dataset = pickle.load(file)
 
@@ -52,6 +54,7 @@ class DataPipeline:
         plt.figure(figsize=(20,20))
         for i in range(img_num):
             plt.subplot(1, img_num, i+1)
-            plt.title(f"Label - {data_y[i]}")
+            label = self.class_names[np.argmax(data_y[i])]
+            plt.title(f"Label - {label}", fontproperties=self.font)
             plt.imshow(data_x[i].reshape(28,28), cmap="Greys")
         plt.show()
