@@ -4,7 +4,7 @@ import tensorflow as tf
 from pathlib import Path
 from tensorflow import keras
 import matplotlib.pyplot as plt
-from matplotlib import font_manager, rc_params
+from matplotlib import font_manager
 from sklearn.model_selection import train_test_split
 
 class DataPipeline:

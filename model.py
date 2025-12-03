@@ -3,7 +3,7 @@ from tensorflow import keras
 from tensorflow.keras import layers, models
 from tensorflow.keras.callbacks import EarlyStopping
 
-class BurmeseNumberPredictor:
+class BurmeseNumberClassifier:
     def __init__(self, train_x, train_y, valid_x, valid_y, test_x, test_y, class_names, epochs=50, batch_size=64):
         self.train_x       = train_x
         self.train_y       = train_y
@@ -42,6 +42,7 @@ class BurmeseNumberPredictor:
         ])
 
         self.model = model
+
         return self.model
     
     def _compile_model(self):
@@ -64,4 +65,9 @@ class BurmeseNumberPredictor:
         )
         return training_history
 
+    def evaluate_model_performance(self):
+        loss, accuracy = self.model.evaluate(self.test_x, self. test_y)
+        print(f"Model testing accuracy : {accuracy*100:.3f}%")
+        return accuracy, loss
+    
     
