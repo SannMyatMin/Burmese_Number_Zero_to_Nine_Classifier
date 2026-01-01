@@ -18,9 +18,6 @@ The project uses a prepared dataset stored in `data.pkl` and supports prediction
 
 ---
 
-
----
-
 ## 🛠️ Technologies Used
 
 - Python 3.x
